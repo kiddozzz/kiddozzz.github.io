@@ -1,0 +1,1046 @@
+<html><head><base href="https://cdn.jsdelivr.net/">
+<meta charset="UTF-8">
+<title>Kiddo Numbers</title>
+<style>
+:root {
+  --primary: #4CAF50;
+  --secondary: #FFC107;
+  --background: #f0f7ff;
+}
+
+body {
+  font-family: 'Comic Sans MS', cursive;
+  margin: 0;
+  padding: 20px;
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  padding: 20px;
+  background: #FFDAB9;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+
+.math-section {
+  background: #E0FFE0; 
+  padding: 5px;
+  border-radius: 15px; 
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+.math-section.badge-section {
+  background: #e6f3ff; 
+}
+
+.badge-section {
+  text-align: center;
+}
+
+.badges-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px;
+}
+
+.badge {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: badgeAppear 0.5s ease-out;
+}
+
+.badge svg {
+  width: 60px;
+  height: 60px;
+}
+
+.badge svg text {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+}
+
+.badge-label {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #333;
+  text-align: center;
+  width: 100%;
+}
+
+.badge-locked {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+.number-canvas {
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.number-canvas-wrapper {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.practice-area {
+  background: #fff;
+  padding: 2px; 
+  border-radius: 10px; 
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.math-section .practice-area {
+  padding: 5px;
+  margin: 5px 0;
+}
+
+.problem {
+  font-size: 24px;
+  margin: 5px 0;
+}
+
+input[type="number"] {
+  font-size: 18px;
+  padding: 4px 8px;
+  width: 80px;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: var(--secondary);
+}
+
+.feedback {
+  font-size: 18px;
+  margin: 5px auto;
+  min-height: 20px;
+  text-align: center;
+}
+
+.celebration {
+  position: fixed;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.puzzle-description {
+  background: #f8f9fa;
+  padding: 5px;
+  border-radius: 8px;
+  margin: 0 auto 10px auto;
+  border-left: 4px solid var(--primary);
+  max-width: 400px;
+  font-size: 14px;
+}
+
+.timer-display {
+  background: #f8f9fa;
+  padding: 4px;
+  border-radius: 6px;
+  margin: 4px auto;
+  text-align: center;
+  font-size: 16px;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  max-width: 250px;
+}
+
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 2px;
+  margin: 10px auto;
+  justify-self: center;
+  width: fit-content;
+}
+
+.puzzle-tile {
+  width: 80px; 
+  height: 80px; 
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; 
+  cursor: pointer;
+  transition: transform 0.3s;
+  border-radius: 10px;
+  margin: 1px;
+}
+
+.puzzle-tile:hover {
+  transform: scale(1.05);
+}
+
+.empty {
+  background: #ddd;
+}
+
+.calculation-puzzle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.target-number {
+  font-size: 20px; 
+  font-weight: bold;
+  margin: 5px 0; 
+}
+
+.calculation-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1px;  
+  margin: 5px 0; 
+  justify-content: center;
+}
+
+.calculation-tile {
+  width: 35px;  
+  height: 35px; 
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px; 
+  cursor: pointer;
+  border-radius: 6px;  
+  transition: transform 0.2s;
+}
+
+.operations {
+  display: flex;
+  gap: 1px; 
+  margin: 5px 0; 
+}
+
+.operations button {
+  width: 35px;  
+  height: 35px; 
+  font-size: 18px; 
+}
+
+.current-calculation {
+  min-height: 25px; 
+  font-size: 18px; 
+  margin: 5px 0; 
+  padding: 3px 8px; 
+  border: 1px solid var(--primary);
+  border-radius: 4px;  
+}
+
+.visitor-counter {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.range-selector {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.range-selector select {
+    padding: 8px 15px;
+    font-size: 16px;
+    border: 2px solid var(--primary);
+    border-radius: 5px;
+    cursor: pointer;
+    background: white;
+}
+
+.range-selector select:hover {
+    border-color: var(--secondary);
+}
+
+.comments-section {
+  background: #E0FFE0;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.comment-input {
+  padding: 8px;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.comments-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.comment-text {
+  margin: 0;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+.floating-numbers {
+  position: absolute;
+  animation: float 3s infinite ease-in-out;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>&#x1f31f; Kiddo Numbers! &#x1f31f;</h1>
+    <p>Learn and have fun with numbers!</p>
+  </div>
+
+  <div class="math-section badge-section">
+    <h2>Your Badge Collection &#x1f3c6;</h2>
+    <div class="badges-container" id="badgesContainer">
+    </div>
+  </div>
+
+  <div class="math-section">
+    <h2>Number Recognition</h2>
+    <div class="range-selector">
+        <select id="numberRange" onchange="updateNumberRange()">
+            <option value="1-20">Numbers 1-20</option>
+            <option value="21-40">Numbers 21-40</option>
+            <option value="41-60">Numbers 41-60</option>
+            <option value="61-80">Numbers 61-80</option>
+            <option value="81-100">Numbers 81-100</option>
+            <option value="101-120">Numbers 101-120</option>
+            <option value="121-140">Numbers 121-140</option>
+            <option value="141-160">Numbers 141-160</option>
+            <option value="161-180">Numbers 161-180</option>
+            <option value="181-200">Numbers 181-200</option>
+            <option value="201-220">Numbers 201-220</option>
+            <option value="221-240">Numbers 221-240</option>
+            <option value="241-260">Numbers 241-260</option>
+            <option value="261-280">Numbers 261-280</option>
+            <option value="281-300">Numbers 281-300</option>
+        </select>
+    </div>
+    <div class="number-canvas-wrapper">
+      <canvas id="numberCanvas" class="number-canvas"></canvas>
+    </div>
+  </div>
+
+  <div class="math-section">
+    <h2>Addition Practice</h2>
+    <div class="practice-area">
+      <div class="problem" id="problem"></div>
+      <div class="answer-container">
+        <input type="number" id="answer" placeholder="Your answer">
+        <button onclick="checkAnswer()">Check Answer</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <div class="math-section">
+    <h2>Subtraction Practice</h2>
+    <div class="practice-area">
+      <div class="problem" id="subtractionProblem"></div>
+      <div class="answer-container">
+        <input type="number" id="subtractionAnswer" placeholder="Your answer">
+        <button onclick="checkSubtractionAnswer()">Check Answer</button>
+      </div>
+      <div class="feedback" id="subtractionFeedback"></div>
+    </div>
+  </div>
+
+  <div class="math-section">
+    <h2>Mixed Calculations Practice</h2>
+    <div class="practice-area">
+      <div class="problem" id="mixedProblem"></div>
+      <div class="answer-container">
+        <input type="number" id="mixedAnswer" placeholder="Your answer">
+        <button onclick="checkMixedAnswer()">Check Answer</button>
+      </div>
+      <div class="feedback" id="mixedFeedback"></div>
+    </div>
+  </div>
+
+  <div class="math-section">
+    <h2>Number Puzzle</h2>
+    <div class="puzzle-description">
+        <div class="range-selector">
+            <select id="puzzleRange" onchange="updatePuzzleRange()">
+                <option value="1-8">Numbers 1-8</option>
+                <option value="11-18">Numbers 11-18</option>
+                <option value="21-28">Numbers 21-28</option>
+                <option value="31-38">Numbers 31-38</option>
+            </select>
+        </div>
+      <h3>How to Play:</h3>
+      <p>&#x1f3ae; Click the tiles next to the empty space to move them.</p>
+      <p>&#x1f3af; Your goal is to arrange the numbers in order.</p>
+      <p>&#x1f504; Click &apos;New Puzzle&apos; to start a new game anytime!</p>
+      <p>&#x1f4a1; Tip: Try to get each number into its correct position one at a time.</p>
+    </div>
+    <div class="timer-display">
+      Time Spent: <span id="puzzleTimer">00:00</span>
+    </div>
+    <div class="practice-area">
+      <div class="puzzle-grid" id="puzzleGrid"></div>
+      <button onclick="shufflePuzzle()">New Puzzle</button>
+      <div class="feedback" id="puzzleFeedback"></div>
+    </div>
+  </div>
+  
+  <div class="math-section">
+    <h2>Number Calculation Puzzle</h2>
+    <div class="puzzle-description">
+      <div class="range-selector">
+        <select id="calculationPuzzleRange" onchange="updateCalculationPuzzleRange()">
+          <option value="1-8">Numbers 1-8</option>
+          <option value="9-16">Numbers 9-16</option>
+          <option value="17-24">Numbers 17-24</option>
+        </select>
+      </div>
+      <h3>How to Play:</h3>
+      <p>&#x1f3ae; Click the tiles to select numbers and operations</p>
+      <p>&#x1f3af; Create calculations that equal the target number</p>
+      <p>&#x1f4a1; Use + and - to reach the target</p>
+    </div>
+    <div class="practice-area">
+      <div class="calculation-puzzle">
+        <div class="target-number">Target: <span id="targetNumber">?</span></div>
+        <div class="calculation-grid" id="calculationGrid"></div>
+        <div class="operations">
+          <button onclick="addOperation('+')">+</button>
+          <button onclick="addOperation('-')">-</button>
+        </div>
+        <div class="current-calculation" id="currentCalculation"></div>
+        <button onclick="newCalculationPuzzle()">New Puzzle</button>
+        <div class="feedback" id="calculationFeedback"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="math-section comments-section">
+    <h2>Comments &#x1f4ac;</h2>
+    <div class="comment-form">
+      <textarea id="commentInput" class="comment-input" placeholder="Share your thoughts..."></textarea>
+      <button onclick="addComment()">Post Comment</button>
+    </div>
+    <div class="comments-list" id="commentsList">
+    </div>
+  </div>
+  
+  <div class="visitor-counter">
+    <span class="counter-icon">&#x1f465;</span>
+    <span>Visitors:</span>
+    <span class="visitor-count" id="visitorCount">Loading...</span>
+  </div>
+</div>
+
+<div class="celebration" id="celebration"></div>
+
+<script>const canvas = document.getElementById('numberCanvas');
+const ctx = canvas.getContext('2d');
+const COLS = 5;
+const TILE_SIZE = 45;
+const PADDING = 8;
+let startNumber = 1;
+let endNumber = 20;
+let mixedDifficultyLevel = 1;
+let mixedCorrectStreak = 0;
+canvas.width = COLS * (TILE_SIZE + PADDING) + PADDING;
+canvas.height = Math.ceil((endNumber - startNumber + 1) / COLS) * (TILE_SIZE + PADDING) + PADDING;
+function updateNumberRange() {
+  const range = document.getElementById('numberRange').value;
+  [startNumber, endNumber] = range.split('-').map(num => parseInt(num));
+  drawNumbers();
+}
+function drawNumbers() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const totalNumbers = endNumber - startNumber + 1;
+  const ROWS = Math.ceil(totalNumbers / COLS);
+  canvas.height = ROWS * (TILE_SIZE + PADDING) + PADDING;
+  let number = startNumber;
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      if (number <= endNumber) {
+        const x = col * (TILE_SIZE + PADDING) + PADDING;
+        const y = row * (TILE_SIZE + PADDING) + PADDING;
+        ctx.fillStyle = '#4CAF50';
+        ctx.beginPath();
+        ctx.roundRect(x, y, TILE_SIZE, TILE_SIZE, 8);
+        ctx.fill();
+        ctx.fillStyle = 'white';
+        ctx.font = '14px Comic Sans MS';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(number.toString(), x + TILE_SIZE / 2, y + TILE_SIZE / 2);
+        number++;
+      }
+    }
+  }
+}
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const col = Math.floor((x - PADDING) / (TILE_SIZE + PADDING));
+  const row = Math.floor((y - PADDING) / (TILE_SIZE + PADDING));
+  const number = startNumber + (row * COLS + col);
+  if (number >= startNumber && number <= endNumber) {
+    const utterance = new SpeechSynthesisUtterance(number.toString());
+    speechSynthesis.speak(utterance);
+  }
+});
+let currentNum1, currentNum2;
+let correctStreak = 0;
+let difficultyLevel = 1;
+let currentSubNum1, currentSubNum2;
+let subtractionCorrectStreak = 0;
+let subtractionDifficultyLevel = 1;
+let currentMixedNum1, currentMixedNum2, currentMixedNum3;
+function generateProblem() {
+  const maxNumber = 10 * difficultyLevel;
+  currentNum1 = Math.floor(Math.random() * maxNumber) + 1;
+  currentNum2 = Math.floor(Math.random() * maxNumber) + 1;
+  document.getElementById('problem').textContent = `${currentNum1} + ${currentNum2} = ?`;
+  document.getElementById('answer').value = '';
+  document.getElementById('feedback').textContent = '';
+}
+function showCelebration() {
+  const celebration = document.getElementById('celebration');
+  celebration.style.display = 'block';
+  celebration.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const number = document.createElement('div');
+    number.className = 'floating-numbers';
+    number.style.left = Math.random() * 100 + 'vw';
+    number.style.top = Math.random() * 100 + 'vh';
+    number.style.fontSize = Math.random() * 30 + 20 + 'px';
+    number.style.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+    number.textContent = Math.floor(Math.random() * 10);
+    celebration.appendChild(number);
+  }
+  setTimeout(() => {
+    celebration.style.display = 'none';
+  }, 2000);
+}
+function checkAnswer() {
+  const userAnswer = parseInt(document.getElementById('answer').value);
+  const correctAnswer = currentNum1 + currentNum2;
+  const feedback = document.getElementById('feedback');
+  
+  if (userAnswer === correctAnswer) {
+    correctStreak++;
+    if (correctStreak === 3) {
+      difficultyLevel++;
+      correctStreak = 0;
+      feedback.innerHTML = `&#x1f389; Correct! Moving to level ${difficultyLevel}! &#x1f389;`;
+    } else {
+      feedback.innerHTML = '&#x1f389; Correct! Well done! &#x1f389;';
+    }
+    feedback.style.color = 'green';
+    showCelebration();
+    setTimeout(generateProblem, 2000);
+  } else {
+    feedback.innerHTML = 'Try again! You can do it! &#x1f4aa;';
+    feedback.style.color = 'red';
+    correctStreak = 0;
+  }
+}
+function generateSubtractionProblem() {
+  const maxNumber = 10 * subtractionDifficultyLevel;
+  currentSubNum2 = Math.floor(Math.random() * maxNumber) + 1;
+  currentSubNum1 = currentSubNum2 + Math.floor(Math.random() * maxNumber) + 1;
+  document.getElementById('subtractionProblem').textContent = `${currentSubNum1} - ${currentSubNum2} = ?`;
+  document.getElementById('subtractionAnswer').value = '';
+  document.getElementById('subtractionFeedback').textContent = '';
+}
+function checkSubtractionAnswer() {
+  const userAnswer = parseInt(document.getElementById('subtractionAnswer').value);
+  const correctAnswer = currentSubNum1 - currentSubNum2;
+  const feedback = document.getElementById('subtractionFeedback');
+  
+  if (userAnswer === correctAnswer) {
+    subtractionCorrectStreak++;
+    if (subtractionCorrectStreak === 3) {
+      subtractionDifficultyLevel++;
+      subtractionCorrectStreak = 0;
+      feedback.innerHTML = `&#x1f389; Correct! Moving to level ${subtractionDifficultyLevel}! &#x1f389;`;
+    } else {
+      feedback.innerHTML = '&#x1f389; Correct! Well done! &#x1f389;';
+    }
+    feedback.style.color = 'green';
+    showCelebration();
+    setTimeout(generateSubtractionProblem, 2000);
+  } else {
+    feedback.innerHTML = 'Try again! You can do it! &#x1f4aa;';
+    feedback.style.color = 'red';
+    subtractionCorrectStreak = 0;
+  }
+}
+
+function generateMixedProblem() {
+  const maxNumber = 10 * mixedDifficultyLevel;
+  currentMixedNum1 = Math.floor(Math.random() * maxNumber) + 1;
+  currentMixedNum2 = Math.floor(Math.random() * maxNumber) + 1;
+  currentMixedNum3 = Math.floor(Math.random() * maxNumber) + 1;
+
+  document.getElementById('mixedProblem').textContent = 
+    `${currentMixedNum1} + ${currentMixedNum2} - ${currentMixedNum3} = ?`;
+  
+  document.getElementById('mixedAnswer').value = '';
+  document.getElementById('mixedFeedback').textContent = '';
+}
+
+function checkMixedAnswer() {
+  const userAnswer = parseInt(document.getElementById('mixedAnswer').value);
+  const correctAnswer = currentMixedNum1 + currentMixedNum2 - currentMixedNum3;
+  
+  const feedback = document.getElementById('mixedFeedback');
+  
+  if (userAnswer === correctAnswer) {
+    mixedCorrectStreak++;
+    if (mixedCorrectStreak === 5) { 
+      mixedDifficultyLevel++;
+      mixedCorrectStreak = 0;
+      feedback.innerHTML = `&#x1f389; Correct! Moving to level ${mixedDifficultyLevel}! &#x1f389;`;
+    } else {
+      feedback.innerHTML = '&#x1f389; Correct! Well done! &#x1f389;';
+    }
+    feedback.style.color = 'green';
+    showCelebration();
+    setTimeout(generateMixedProblem, 2000);
+  } else {
+    feedback.innerHTML = 'Try again! You can do it! &#x1f4aa;';
+    feedback.style.color = 'red';
+    mixedCorrectStreak = 0;
+  }
+}
+
+let puzzleNumbers = [1, 2, 3, 4, 5, 6, 7, 8, null];
+const puzzleGrid = document.getElementById('puzzleGrid');
+let puzzleStartTime = null;
+let puzzleTimerInterval = null;
+let totalPuzzleTime = 0;
+let puzzleStartNum = 1;
+let puzzleEndNum = 8;
+function startPuzzleTimer() {
+  if (!puzzleStartTime) {
+    puzzleStartTime = new Date();
+    updatePuzzleTimer();
+    puzzleTimerInterval = setInterval(updatePuzzleTimer, 1000);
+  }
+}
+function updatePuzzleTimer() {
+  const currentTime = new Date();
+  const timeDiff = Math.floor((currentTime - puzzleStartTime) / 1000) + totalPuzzleTime;
+  const minutes = Math.floor(timeDiff / 60).toString().padStart(2, '0');
+  const seconds = (timeDiff % 60).toString().padStart(2, '0');
+  document.getElementById('puzzleTimer').textContent = `${minutes}:${seconds}`;
+}
+function pausePuzzleTimer() {
+  if (puzzleTimerInterval) {
+    clearInterval(puzzleTimerInterval);
+    totalPuzzleTime += Math.floor((new Date() - puzzleStartTime) / 1000);
+    puzzleStartTime = null;
+    puzzleTimerInterval = null;
+  }
+}
+function createPuzzle() {
+  puzzleGrid.innerHTML = '';
+  puzzleNumbers.forEach((num, index) => {
+    const tile = document.createElement('div');
+    tile.className = `puzzle-tile ${!num ? 'empty' : ''}`;
+    tile.textContent = num || '';
+    tile.addEventListener('click', () => moveTile(index));
+    puzzleGrid.appendChild(tile);
+  });
+}
+function moveTile(index) {
+  startPuzzleTimer();
+  const emptyIndex = puzzleNumbers.indexOf(null);
+  if (isAdjacent(index, emptyIndex)) {
+    [puzzleNumbers[index], puzzleNumbers[emptyIndex]] = [puzzleNumbers[emptyIndex], puzzleNumbers[index]];
+    createPuzzle();
+    checkWin();
+  }
+}
+function isAdjacent(index1, index2) {
+  const row1 = Math.floor(index1 / 3);
+  const col1 = index1 % 3;
+  const row2 = Math.floor(index2 / 3);
+  const col2 = index2 % 3;
+  return Math.abs(row1 - row2) + Math.abs(col1 - col2) === 1;
+}
+function shufflePuzzle() {
+  pausePuzzleTimer();
+  totalPuzzleTime = 0;
+  document.getElementById('puzzleTimer').textContent = '00:00';
+  puzzleNumbers = Array.from({
+    length: 8
+  }, (_, i) => puzzleStartNum + i);
+  puzzleNumbers.push(null);
+  for (let i = 0; i < 100; i++) {
+    const emptyIndex = puzzleNumbers.indexOf(null);
+    const possibleMoves = [];
+    if (emptyIndex % 3 > 0) possibleMoves.push(emptyIndex - 1);
+    if (emptyIndex % 3 < 2) possibleMoves.push(emptyIndex + 1);
+    if (emptyIndex >= 3) possibleMoves.push(emptyIndex - 3);
+    if (emptyIndex < 6) possibleMoves.push(emptyIndex + 3);
+    const randomMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+    [puzzleNumbers[emptyIndex], puzzleNumbers[randomMove]] = [puzzleNumbers[randomMove], puzzleNumbers[emptyIndex]];
+  }
+  createPuzzle();
+  document.getElementById('puzzleFeedback').textContent = '';
+}
+function checkWin() {
+  const solution = Array.from({
+    length: 8
+  }, (_, i) => puzzleStartNum + i);
+  solution.push(null);
+  if (puzzleNumbers.every((num, index) => num === solution[index])) {
+    pausePuzzleTimer();
+    document.getElementById('puzzleFeedback').textContent = '&#x1f389; Puzzle Solved! &#x1f389;';
+    showCelebration();
+  }
+}
+function initVisitorCounter() {
+  let count = localStorage.getItem('visitorCount');
+  if (!count) {
+    count = 1;
+  } else {
+    const lastVisit = localStorage.getItem('lastVisit');
+    const now = new Date().getTime();
+    if (!lastVisit || now - lastVisit > 24 * 60 * 60 * 1000) {
+      count = parseInt(count) + 1;
+    }
+  }
+  localStorage.setItem('visitorCount', count);
+  localStorage.setItem('lastVisit', new Date().getTime());
+  document.getElementById('visitorCount').textContent = count;
+  
+  updateBadges(parseInt(count));
+}
+
+function updateBadges(visitCount) {
+  const badgesContainer = document.getElementById('badgesContainer');
+  badgesContainer.innerHTML = '';
+  
+  const earnedBadges = Math.floor((visitCount - 1) / 3) + 1;
+  const totalBadges = 5;
+  
+  const badges = [
+    { name: "Starter", color: "#FFE4E1", symbol: "🐣" },  // Baby chick
+    { name: "Explorer", color: "#FFE4B5", symbol: "🐰" }, // Rabbit
+    { name: "Champion", color: "#E6E6FA", symbol: "🦁" }, // Lion
+    { name: "Master", color: "#98FB98", symbol: "🦊" },   // Fox
+    { name: "Legend", color: "#FFB6C1", symbol: "🦄" }    // Unicorn
+  ];
+  
+  for (let i = 0; i < totalBadges; i++) {
+    const isEarned = i < earnedBadges;
+    const badge = createBadgeElement(badges[i], isEarned);
+    badgesContainer.appendChild(badge);
+  }
+}
+
+function createBadgeElement(badgeInfo, isEarned) {
+  const badge = document.createElement('div');
+  badge.className = `badge ${isEarned ? '' : 'badge-locked'}`;
+  
+  const svg = `
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="${badgeInfo.color}" />
+      <text x="50" y="65" text-anchor="middle" dominant-baseline="middle" 
+            font-size="50" style="font-family: Arial, sans-serif;">${badgeInfo.symbol}</text>
+    </svg>
+  `;
+  
+  badge.innerHTML = `
+    ${svg}
+    <div class="badge-label">
+      ${badgeInfo.name}
+      ${isEarned ? ' ✨' : ' 🔒'}
+    </div>
+  `;
+  
+  return badge;
+}
+
+function addComment() {
+  const commentInput = document.getElementById('commentInput');
+  const commentsList = document.getElementById('commentsList');
+  const commentText = commentInput.value.trim();
+  
+  if (commentText) {
+    const comment = document.createElement('div');
+    comment.className = 'comment';
+    
+    const now = new Date();
+    const dateStr = now.toLocaleDateString();
+    const timeStr = now.toLocaleTimeString();
+    
+    comment.innerHTML = `
+      <div class="comment-header">
+        <span>Anonymous</span>
+        <span>${dateStr} ${timeStr}</span>
+      </div>
+      <p class="comment-text">${commentText}</p>
+    `;
+    
+    commentsList.insertBefore(comment, commentsList.firstChild);
+    commentInput.value = '';
+    
+    const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+    comments.unshift({
+      text: commentText,
+      date: now.toISOString(),
+      author: 'Anonymous'
+    });
+    localStorage.setItem('comments', JSON.stringify(comments));
+  }
+}
+
+function loadComments() {
+  const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+  const commentsList = document.getElementById('commentsList');
+  
+  comments.forEach(comment => {
+    const commentElement = document.createElement('div');
+    commentElement.className = 'comment';
+    
+    const date = new Date(comment.date);
+    const dateStr = date.toLocaleDateString();
+    const timeStr = date.toLocaleTimeString();
+    
+    commentElement.innerHTML = `
+      <div class="comment-header">
+        <span>${comment.author}</span>
+        <span>${dateStr} ${timeStr}</span>
+      </div>
+      <p class="comment-text">${comment.text}</p>
+    `;
+    
+    commentsList.appendChild(commentElement);
+  });
+}
+
+let calculationNumbers = [];
+let targetNumber = 0;
+let currentCalculation = [];
+let selectedTile = null;
+
+function updateCalculationPuzzleRange() {
+  const range = document.getElementById('calculationPuzzleRange').value;
+  const [start, end] = range.split('-').map(num => parseInt(num));
+  newCalculationPuzzle(start, end);
+}
+
+function newCalculationPuzzle(start = 1, end = 8) {
+  const possibleNumbers = Array.from(
+    {length: end - start + 1}, 
+    (_, i) => start + i
+  );
+  
+  calculationNumbers = possibleNumbers
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 9);
+  
+  const sample = calculationNumbers.slice(0, 3);
+  targetNumber = sample.reduce((a, b) => a + b, 0);
+  
+  document.getElementById('targetNumber').textContent = targetNumber;
+  currentCalculation = [];
+  selectedTile = null;
+  createCalculationGrid();
+  updateCurrentCalculation();
+  document.getElementById('calculationFeedback').textContent = '';
+}
+
+function createCalculationGrid() {
+  const grid = document.getElementById('calculationGrid');
+  grid.innerHTML = '';
+  calculationNumbers.forEach((num, idx) => {
+    const tile = document.createElement('div'); 
+    tile.className = 'calculation-tile';
+    tile.textContent = num;
+    tile.addEventListener('click', () => selectNumber(idx));
+    grid.appendChild(tile);
+  });
+}
+
+function selectNumber(idx) {
+  if (selectedTile !== null) {
+    document.querySelectorAll('.calculation-tile')[selectedTile]
+      .classList.remove('selected');
+  }
+  
+  selectedTile = idx;
+  document.querySelectorAll('.calculation-tile')[idx]
+    .classList.add('selected');
+    
+  if (currentCalculation.length > 0 && !currentCalculation[currentCalculation.length-1].operation) {
+    return; 
+  }
+  
+  currentCalculation.push({
+    number: calculationNumbers[idx],
+    operation: null
+  });
+  
+  updateCurrentCalculation();
+  checkCalculation(); 
+}
+
+function addOperation(op) {
+  if (selectedTile === null && currentCalculation.length === 0) {
+    return;
+  }
+
+  if (currentCalculation.length === 0) {
+    return;
+  }
+
+  currentCalculation[currentCalculation.length - 1].operation = op;
+
+  if (selectedTile !== null) {
+    document.querySelectorAll('.calculation-tile')[selectedTile]
+      .classList.remove('selected');
+    selectedTile = null;
+  }
+
+  updateCurrentCalculation();
+  checkCalculation(); 
+}
+
+function updateCurrentCalculation() {
+  const display = document.getElementById('currentCalculation');
+  let calcText = '';
+  
+  currentCalculation.forEach((item, index) => {
+    calcText += item.number;
+    if (item.operation) {
+      calcText += ` ${item.operation} `;
+      if (item.operation === '=') {
+        return;
+      }
+    }
+  });
+
+  display.textContent = calcText;
+}
+
+function checkCalculation() {
+  if (currentCalculation.length < 2) {
+    return; 
+  }
+
+  let result = currentCalculation[0].number;
+  for (let i = 1; i < currentCalculation.length; i++) {
+    const {number, operation} = currentCalculation[i-1];
+    if (!operation) continue;
+    switch(operation) {
+      case '+': result += currentCalculation[i].number; break;
+      case '-': result -= currentCalculation[i].number; break;
+    }
+  }
+  
+  const feedback = document.getElementById('calculationFeedback');
+  if (Math.abs(result - targetNumber) < 0.0001) {
+    feedback.innerHTML = '&#x1f389; Correct! Well done! &#x1f389;';
+    showCelebration();
+    setTimeout(newCalculationPuzzle, 2000);
+  } else {
+    feedback.textContent = 'Not quite! Try again!';
+  }
+}
+
+initVisitorCounter();
+generateSubtractionProblem();
+generateProblem();
+createPuzzle();
+shufflePuzzle();
+drawNumbers();
+generateSubtractionProblem();
+loadComments();
+newCalculationPuzzle();
+generateMixedProblem();
+</script>
+</body></html>
