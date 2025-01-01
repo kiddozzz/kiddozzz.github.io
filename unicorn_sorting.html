@@ -30,79 +30,6 @@ body {
   margin-bottom: 30px;
 }
 
-.comments-section {
-  background: #E0FFE0;
-  padding: 15px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.comment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.comment-input {
-  padding: 8px;
-  border: 2px solid var(--primary);
-  border-radius: 5px;
-  font-family: inherit;
-  resize: vertical;
-  min-height: 60px;
-}
-
-button {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background: var(--secondary);
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.comments-list {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.comment {
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  border-left: 4px solid var(--primary);
-}
-
-.comment-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  font-size: 0.9em;
-  color: #666;
-}
-
-.comment-text {
-  margin: 0;
-}
-
 .visitor-counter {
   background: white;
   padding: 15px;
@@ -312,6 +239,28 @@ button:hover {
   background: var(--secondary);
 }
 
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: var(--secondary);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -395,16 +344,6 @@ button:hover {
     <div id="congratsMessageFruit" class="congratulations-message"></div>
   </div>
 
-  <div class="comments-section">
-    <h2>Comments &#x1f4ac;</h2>
-    <div class="comment-form">
-      <textarea id="commentInput" class="comment-input" placeholder="Share your thoughts..."></textarea>
-      <button onclick="addComment()">Post Comment</button>
-    </div>
-    <div class="comments-list" id="commentsList">
-    </div>
-  </div>
-  
   <div class="visitor-counter">
     <span class="counter-icon">&#x1f465;</span>
     <span>Visitors:</span>
@@ -728,53 +667,6 @@ function initVisitorCounter() {
   localStorage.setItem('lastVisit', new Date().getTime());
   document.getElementById('visitorCount').textContent = count;
 }
-function addComment() {
-  const commentInput = document.getElementById('commentInput');
-  const commentsList = document.getElementById('commentsList');
-  const commentText = commentInput.value.trim();
-  if (commentText) {
-    const comment = document.createElement('div');
-    comment.className = 'comment';
-    const now = new Date();
-    const dateStr = now.toLocaleDateString();
-    const timeStr = now.toLocaleTimeString();
-    comment.innerHTML = `
-      <div class="comment-header">
-        <span>Anonymous</span>
-        <span>${dateStr} ${timeStr}</span>
-      </div>
-      <p class="comment-text">${commentText}</p>
-    `;
-    commentsList.insertBefore(comment, commentsList.firstChild);
-    commentInput.value = '';
-    const comments = JSON.parse(localStorage.getItem('comments') || '[]');
-    comments.unshift({
-      text: commentText,
-      date: now.toISOString(),
-      author: 'Anonymous'
-    });
-    localStorage.setItem('comments', JSON.stringify(comments));
-  }
-}
-function loadComments() {
-  const comments = JSON.parse(localStorage.getItem('comments') || '[]');
-  const commentsList = document.getElementById('commentsList');
-  comments.forEach(comment => {
-    const commentElement = document.createElement('div');
-    commentElement.className = 'comment';
-    const date = new Date(comment.date);
-    const dateStr = date.toLocaleDateString();
-    const timeStr = date.toLocaleTimeString();
-    commentElement.innerHTML = `
-      <div class="comment-header">
-        <span>${comment.author}</span>
-        <span>${dateStr} ${timeStr}</span>
-      </div>
-      <p class="comment-text">${comment.text}</p>
-    `;
-    commentsList.appendChild(commentElement);
-  });
-}
 function generateFruits() {
   fruits = [];
   while (fruits.length < 6) {
@@ -863,7 +755,6 @@ function newFruitGame() {
 }
 document.getElementById('rangeSelect').value = "1-30";
 initVisitorCounter();
-loadComments();
 newGame();
 newGameDesc();
 newMissing();
