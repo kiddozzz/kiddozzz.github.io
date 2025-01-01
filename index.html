@@ -294,37 +294,6 @@ button:hover {
   border-radius: 4px;  
 }
 
-.visitor-counter {
-  background: white;
-  padding: 15px;
-  border-radius: 15px;
-  margin: 20px 0;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.range-selector {
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.range-selector select {
-    padding: 8px 15px;
-    font-size: 16px;
-    border: 2px solid var(--primary);
-    border-radius: 5px;
-    cursor: pointer;
-    background: white;
-}
-
-.range-selector select:hover {
-    border-color: var(--secondary);
-}
-
 .comments-section {
   background: #E0FFE0;
   padding: 15px;
@@ -374,6 +343,19 @@ button:hover {
 
 .comment-text {
   margin: 0;
+}
+
+.comment-delete {
+  color: #dc3545;
+  cursor: pointer;
+  float: right;
+  padding: 2px 6px;
+  font-size: 0.8em;
+  border-radius: 4px;
+}
+
+.comment-delete:hover {
+  background: #ffebee;
 }
 
 @keyframes float {
@@ -536,17 +518,43 @@ button:hover {
     <div class="comments-list" id="commentsList">
     </div>
   </div>
-  
-  <div class="visitor-counter">
-    <span class="counter-icon">&#x1f465;</span>
-    <span>Visitors:</span>
-    <span class="visitor-count" id="visitorCount">Loading...</span>
-  </div>
 </div>
 
 <div class="celebration" id="celebration"></div>
 
-<script>const canvas = document.getElementById('numberCanvas');
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+// Add Firebase initialization and configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD4hTK6t7HMC3v2BnKAHx-aq69H_qxo8ks",
+  authDomain: "kiddo-numbers.firebaseapp.com",
+  projectId: "kiddo-numbers",
+  storageBucket: "kiddo-numbers.appspot.com", 
+  messagingSenderId: "496092734425",
+  appId: "1:496092734425:web:f9d48f34151fc3df55c593"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let lastVisitTime = localStorage.getItem('lastVisitTime') || 0;
+let visitCount = parseInt(localStorage.getItem('visitCount') || '0');
+const VISIT_TIMEOUT = 60 * 60 * 1000; // 1 hour in milliseconds
+
+const animalBadges = [
+  { animal: '🐶', name: 'Puppy Badge' },
+  { animal: '🐱', name: 'Kitty Badge' },
+  { animal: '🐰', name: 'Bunny Badge' }, 
+  { animal: '🐼', name: 'Panda Badge' },
+  { animal: '🦊', name: 'Fox Badge' },
+  { animal: '🦁', name: 'Lion Badge' },
+  { animal: '🐸', name: 'Frog Badge' },
+  { animal: '🦉', name: 'Owl Badge' }
+];
+
+const canvas = document.getElementById('numberCanvas');
 const ctx = canvas.getContext('2d');
 const COLS = 5;
 const TILE_SIZE = 45;
@@ -812,104 +820,6 @@ function checkWin() {
     showCelebration();
   }
 }
-function initVisitorCounter() {
-  let lastVisitTime = localStorage.getItem('lastVisitTime') || 0;
-  const now = Date.now();
-  const oneHour = 60 * 1000; // 1 hour in milliseconds
-  
-  if (now - lastVisitTime > oneHour) {
-    fetch('https://kiddozzz.github.io/visitors/count', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById('visitorCount').textContent = data.count;
-      updateBadges(data.count);
-      // Update last visit time
-      lastVisitTime = now;
-      localStorage.setItem('lastVisitTime', now);
-    })
-    .catch(error => {
-      console.error('Error updating visitor count:', error);
-      let count = parseInt(localStorage.getItem('visitorCount') || '1');
-      // Only increment if more than 1 hour passed
-      if (now - lastVisitTime > oneHour) {
-        count++;
-        localStorage.setItem('visitorCount', count);
-        lastVisitTime = now;
-        localStorage.setItem('lastVisitTime', now);
-      }
-      document.getElementById('visitorCount').textContent = count;
-      updateBadges(parseInt(count));
-    });
-  } else {
-    // If less than 1 hour, just display current count
-    fetch('https://kiddozzz.github.io/visitors/count', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json' 
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      document.getElementById('visitorCount').textContent = data.count;
-      updateBadges(data.count);
-    })
-    .catch(error => {
-      console.error('Error getting visitor count:', error);
-      const count = localStorage.getItem('visitorCount') || 1;
-      document.getElementById('visitorCount').textContent = count;
-      updateBadges(parseInt(count));
-    });
-  }
-}
-function updateBadges(visitCount) {
-  const badgesContainer = document.getElementById('badgesContainer');
-  badgesContainer.innerHTML = '';
-  
-  const earnedBadges = Math.floor((visitCount - 1) / 3) + 1;
-  const totalBadges = 5;
-  
-  const badges = [
-    { name: "Starter", color: "#FFE4E1", symbol: "🐣" },  // Baby chick
-    { name: "Explorer", color: "#FFE4B5", symbol: "🐰" }, // Rabbit
-    { name: "Champion", color: "#E6E6FA", symbol: "🦁" }, // Lion
-    { name: "Master", color: "#98FB98", symbol: "🦊" },   // Fox
-    { name: "Legend", color: "#FFB6C1", symbol: "🦄" }    // Unicorn
-  ];
-  
-  for (let i = 0; i < totalBadges; i++) {
-    const isEarned = i < earnedBadges;
-    const badge = createBadgeElement(badges[i], isEarned);
-    badgesContainer.appendChild(badge);
-  }
-}
-
-function createBadgeElement(badgeInfo, isEarned) {
-  const badge = document.createElement('div');
-  badge.className = `badge ${isEarned ? '' : 'badge-locked'}`;
-  
-  const svg = `
-    <svg viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="45" fill="${badgeInfo.color}" />
-      <text x="50" y="65" text-anchor="middle" dominant-baseline="middle" 
-            font-size="50" style="font-family: Arial, sans-serif;">${badgeInfo.symbol}</text>
-    </svg>
-  `;
-  
-  badge.innerHTML = `
-    ${svg}
-    <div class="badge-label">
-      ${badgeInfo.name}
-      ${isEarned ? ' ✨' : ' 🔒'}
-    </div>
-  `;
-  
-  return badge;
-}
 
 function addComment() {
   const commentInput = document.getElementById('commentInput');
@@ -924,10 +834,13 @@ function addComment() {
     const dateStr = now.toLocaleDateString();
     const timeStr = now.toLocaleTimeString();
     
+    const commentId = Date.now().toString(); // Generate unique ID
+    
     comment.innerHTML = `
       <div class="comment-header">
         <span>Anonymous</span>
         <span>${dateStr} ${timeStr}</span>
+        <span class="comment-delete" data-id="${commentId}">Delete</span>
       </div>
       <p class="comment-text">${commentText}</p>
     `;
@@ -937,6 +850,7 @@ function addComment() {
     
     const comments = JSON.parse(localStorage.getItem('comments') || '[]');
     comments.unshift({
+      id: commentId,
       text: commentText,
       date: now.toISOString(),
       author: 'Anonymous'
@@ -948,6 +862,8 @@ function addComment() {
 function loadComments() {
   const comments = JSON.parse(localStorage.getItem('comments') || '[]');
   const commentsList = document.getElementById('commentsList');
+  
+  commentsList.innerHTML = '';
   
   comments.forEach(comment => {
     const commentElement = document.createElement('div');
@@ -961,6 +877,7 @@ function loadComments() {
       <div class="comment-header">
         <span>${comment.author}</span>
         <span>${dateStr} ${timeStr}</span>
+        <span class="comment-delete" data-id="${comment.id}">Delete</span>
       </div>
       <p class="comment-text">${comment.text}</p>
     `;
@@ -969,10 +886,21 @@ function loadComments() {
   });
 }
 
-let calculationNumbers = [];
-let targetNumber = 0;
-let currentCalculation = [];
-let selectedTile = null;
+function deleteComment(commentId) {
+  const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+  const updatedComments = comments.filter(comment => comment.id !== commentId);
+  localStorage.setItem('comments', JSON.stringify(updatedComments));
+  
+  const commentElement = document.querySelector(`[data-id="${commentId}"]`).closest('.comment');
+  commentElement.remove();
+}
+
+document.getElementById('commentsList').addEventListener('click', (e) => {
+  if (e.target.classList.contains('comment-delete')) {
+    const commentId = e.target.dataset.id;
+    deleteComment(commentId);
+  }
+});
 
 function updateCalculationPuzzleRange() {
   const range = document.getElementById('calculationPuzzleRange').value;
@@ -1099,7 +1027,56 @@ function checkCalculation() {
   }
 }
 
-initVisitorCounter();
+function checkAndIncrementVisits() {
+  const currentTime = Date.now();
+  
+  // If more than VISIT_TIMEOUT has passed since last visit
+  if (currentTime - lastVisitTime > VISIT_TIMEOUT) {
+    visitCount++;
+    lastVisitTime = currentTime;
+    
+    // Save to localStorage
+    localStorage.setItem('visitCount', visitCount);
+    localStorage.setItem('lastVisitTime', lastVisitTime);
+    
+    // Award badge every 3 visits
+    updateBadgesDisplay();
+  }
+}
+
+function updateBadgesDisplay() {
+  const badgesContainer = document.getElementById('badgesContainer');
+  badgesContainer.innerHTML = '';
+  
+  const earnedBadges = Math.floor(visitCount / 3); 
+  
+  for (let i = 0; i < animalBadges.length; i++) {
+    const badge = document.createElement('div');
+    badge.className = `badge ${i >= earnedBadges ? 'badge-locked' : ''}`;
+    
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '50');
+    text.setAttribute('y', '50');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'middle');
+    text.setAttribute('font-size', '60');
+    text.textContent = animalBadges[i].animal;
+    
+    svg.appendChild(text);
+    badge.appendChild(svg);
+    
+    const label = document.createElement('div');
+    label.className = 'badge-label';
+    label.textContent = animalBadges[i].name;
+    
+    badge.appendChild(label);
+    badgesContainer.appendChild(badge);
+  }
+}
+
 generateSubtractionProblem();
 generateProblem();
 createPuzzle();
@@ -1109,5 +1086,7 @@ generateSubtractionProblem();
 loadComments();
 newCalculationPuzzle();
 generateMixedProblem();
+checkAndIncrementVisits();
+updateBadgesDisplay();
 </script>
 </body></html>
