@@ -5,20 +5,26 @@
 .floating-link {
   position: fixed;
   left: 20px;
-  top: 20px; /* Align with header */
   transform: none;
-  background: #FFB6C1; 
-  color: white;
-  padding: 15px 25px; 
-  border-radius: 25px;
-  text-decoration: none; 
+  background: #FFB6C1;
+  color: white; 
+  padding: 10px 15px; 
+  border-radius: 20px; 
+  text-decoration: none;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px; 
   font-family: 'Comic Sans MS', cursive;
   z-index: 1000;
+  margin-bottom: 10px;
+  width: 140px; 
+  font-size: 14px; 
+}
+
+.floating-link span:last-child {
+  flex: 1; 
 }
 
 .floating-link:hover {
@@ -377,6 +383,10 @@ button:hover {
 <a href="https://kiddozzz.github.io/unicorn_sorting" class="floating-link">
   <span class="unicorn-icon">🦄</span>
   <span>Unicorn Sorting</span>
+</a>
+<a href="https://kiddozzz.github.io/skip_counting" class="floating-link" style="top: 80px;">
+  <span class="frog-icon">🐸</span>
+  <span>Frog Skip Counting</span>
 </a>
 <div class="container">
   <div class="header">
