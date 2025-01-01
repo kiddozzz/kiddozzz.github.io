@@ -816,7 +816,7 @@ function initVisitorCounter() {
   } else {
     const lastVisit = localStorage.getItem('lastVisit');
     const now = new Date().getTime();
-    if (!lastVisit || now - lastVisit > 24 * 60 * 60 * 1000) {
+    if (!lastVisit) {
       count = parseInt(count) + 1;
     }
   }
