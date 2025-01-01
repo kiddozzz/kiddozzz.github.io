@@ -826,7 +826,10 @@ function initVisitorCounter() {
   })
   .catch(error => {
     console.error('Error updating visitor count:', error);;
-    let count = localStorage.getItem('visitorCount') || 1;
+    let count = localStorage.getItem('visitorCount');
+    if (count === null) {
+        count = 0; // First time visiting
+    }
     count += 1;
     localStorage.setItem('visitorCount', count);
     document.getElementById('visitorCount').textContent = count;
