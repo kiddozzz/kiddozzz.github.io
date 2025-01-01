@@ -2,15 +2,14 @@
 <meta charset="UTF-8">
 <title>Kiddo Numbers</title>
 <style>
-/* Add this CSS before the existing styles in <style> */
 .floating-link {
   position: fixed;
   left: 20px;
-  top: calc(50% - 250px); /* Align with header section */
+  top: 20px; /* Align with header */
   transform: none;
   background: #FFB6C1; 
   color: white;
-  padding: 15px 25px;
+  padding: 15px 25px; 
   border-radius: 25px;
   text-decoration: none; 
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -302,7 +301,7 @@ button:hover {
   margin: 20px 0;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  display: none; 
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -390,7 +389,7 @@ button:hover {
 </style>
 </head>
 <body>
-<a href="https://kiddozzz.github.io/unicorn_sorting" class="floating-link">
+<a href="https://unicornsorting.example.com" class="floating-link">
   <span class="unicorn-icon">🦄</span>
   <span>Unicorn Sorting</span>
 </a>
@@ -813,7 +812,7 @@ function checkWin() {
 function initVisitorCounter() {
   let count = localStorage.getItem('visitorCount');
   if (!count) {
-    count = 1;
+    count = 1; 
   } else {
     const lastVisit = localStorage.getItem('lastVisit');
     const now = new Date().getTime();
