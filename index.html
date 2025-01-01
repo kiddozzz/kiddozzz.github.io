@@ -387,6 +387,9 @@ button:hover {
   animation: float 3s infinite ease-in-out;
 }
 </style>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 </head>
 <body>
 <a href="https://kiddozzz.github.io/unicorn_sorting" class="floating-link">
@@ -810,23 +813,25 @@ function checkWin() {
   }
 }
 function initVisitorCounter() {
-  let count = localStorage.getItem('visitorCount');
-  if (!count) {
-    count = 1; 
-  } else {
-    const lastVisit = localStorage.getItem('lastVisit');
-    const now = new Date().getTime();
-    if (!lastVisit) {
-      count = parseInt(count) + 1;
+  fetch('https://api.example.com/visitors/count', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
     }
-  }
-  localStorage.setItem('visitorCount', count);
-  localStorage.setItem('lastVisit', new Date().getTime());
-  document.getElementById('visitorCount').textContent = count;
-  
-  updateBadges(parseInt(count));
+  })
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('visitorCount').textContent = data.count;
+    updateBadges(data.count);
+  })
+  .catch(error => {
+    console.error('Error updating visitor count:', error);
+    let count = localStorage.getItem('visitorCount') || 1;
+    localStorage.setItem('visitorCount', count);
+    document.getElementById('visitorCount').textContent = count;
+    updateBadges(parseInt(count));
+  });
 }
-
 function updateBadges(visitCount) {
   const badgesContainer = document.getElementById('badgesContainer');
   badgesContainer.innerHTML = '';
