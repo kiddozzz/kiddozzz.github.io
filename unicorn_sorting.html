@@ -1,0 +1,853 @@
+<html><head><base href="https://cdn.jsdelivr.net/">
+<meta charset="UTF-8">
+<title>Unicorn</title>
+<style>
+:root {
+  --primary: #4CAF50;
+  --secondary: #FFC107;
+  --background: #f0f7ff;
+}
+
+body {
+  font-family: 'Comic Sans MS', cursive;
+  margin: 0;
+  padding: 20px;
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  padding: 20px;
+  background: #FFDAB9;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+
+.comments-section {
+  background: #E0FFE0;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.comment-input {
+  padding: 8px;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: var(--secondary);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.comments-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.comment-text {
+  margin: 0;
+}
+
+.visitor-counter {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.sorting-section {
+  background: #FFE5F1;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.descending-sort {
+  background: #E0FFE0;
+}
+
+.range-selector {
+  margin: 10px 0;
+  padding: 10px;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.range-selector select {
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.number-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.number-box {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border: 2px solid #FF69B4;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.number-box:hover {
+  transform: scale(1.1);
+}
+
+.answer-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.answer-box {
+  width: 60px;
+  height: 60px;
+  background: #FFF0F5;
+  border: 2px dashed #FF69B4;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.correct {
+  background: #98FB98;
+  border: 2px solid #32CD32;
+}
+
+.incorrect {
+  background: #FFB6C1;
+  border: 2px solid #FF0000;
+}
+
+.congratulations-message {
+  background: #FFE5F1;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 20px 0;
+  text-align: center;
+  display: none;
+  color: #4CAF50;
+  font-size: 1.2em;
+  animation: fadeIn 0.5s ease-in;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.sequence-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.sequence-box {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border: 2px solid #9370DB;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.sequence-input {
+  width: 60px;
+  height: 60px;
+  background: #F0E6FF;
+  border: 2px dashed #9370DB;
+  border-radius: 10px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.missing-numbers {
+  background: #F0E6FF;
+}
+
+.fruit-sorting {
+  background: #FFF0DB;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.fruit-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.fruit-box {
+  width: 120px;
+  height: 60px;
+  background: white;
+  border: 2px solid #FFA500;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.fruit-box:hover {
+  transform: scale(1.1);
+}
+
+.fruit-answer {
+  width: 120px;
+  height: 60px;
+  background: #FFF5E6;
+  border: 2px dashed #FFA500;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>&#x1f31f; Unicorn Sorting! &#x1f31f;</h1>
+    <p>Learn and have fun with numbers!</p>
+  </div>
+
+  <div class="sorting-section">
+    <h2>&#x1f984; Ascending Sort Challenge &#x1f984;</h2>
+    <p>Sort these numbers from smallest to largest! Click the numbers in order.</p>
+    <div class="range-selector">
+      <label>Select number range:</label>
+      <select id="rangeSelect">
+        <option value="1-30">1-30</option>
+        <option value="1-50">1-50</option>
+        <option value="1-100">1-100</option>
+        <option value="30-100">30-100</option>
+        <option value="50-100">50-100</option>
+        <option value="100-200">100-200</option>
+      </select>
+    </div>
+    <div class="number-container" id="numberContainer"></div>
+    <div class="answer-container" id="answerContainer"></div>
+    <div class="button-container">
+      <button onclick="checkAnswer()">Check Answer</button>
+      <button onclick="newGame()">New Numbers</button>
+    </div>
+    <div id="congratsMessage" class="congratulations-message"></div>
+  </div>
+
+  <div class="sorting-section descending-sort">
+    <h2>&#x1f984; Descending Sort Challenge &#x1f984;</h2> 
+    <p>Sort these numbers from largest to smallest! Click the numbers in order.</p>
+    <div class="range-selector">
+      <label>Select number range:</label>
+      <select id="rangeSelectDesc">
+        <option value="1-30">1-30</option>
+        <option value="1-50">1-50</option>
+        <option value="1-100">1-100</option>
+        <option value="30-100">30-100</option>
+        <option value="50-100">50-100</option>
+        <option value="100-200">100-200</option>
+      </select>
+    </div>
+    <div class="number-container" id="numberContainerDesc"></div>
+    <div class="answer-container" id="answerContainerDesc"></div>
+    <div class="button-container">
+      <button onclick="checkAnswerDesc()">Check Answer</button>
+      <button onclick="newGameDesc()">New Numbers</button>
+    </div>
+    <div id="congratsMessageDesc" class="congratulations-message"></div>
+  </div>
+
+  <div class="sorting-section missing-numbers">
+    <h2>&#x1f984; Fill the Missing Numbers Challenge &#x1f984;</h2>
+    <p>Fill in the missing numbers in the sequence!</p>
+    <div class="sequence-container" id="sequenceContainer"></div>
+    <div class="button-container">
+      <button onclick="checkMissing()">Check Answer</button>
+      <button onclick="newMissing()">New Sequence</button>
+    </div>
+    <div id="congratsMessageMissing" class="congratulations-message"></div>
+  </div>
+
+  <div class="fruit-sorting">
+    <h2>&#x1f34e; Fruit Alphabet Sort &#x1f34f;</h2>
+    <p>Sort these fruits in alphabetical order! Click the fruits in order.</p>
+    <div class="fruit-container" id="fruitContainer"></div>
+    <div class="answer-container" id="fruitAnswerContainer"></div>
+    <div class="button-container">
+      <button onclick="checkFruitAnswer()">Check Answer</button>
+      <button onclick="newFruitGame()">New Fruits</button>
+    </div>
+    <div id="congratsMessageFruit" class="congratulations-message"></div>
+  </div>
+
+  <div class="comments-section">
+    <h2>Comments &#x1f4ac;</h2>
+    <div class="comment-form">
+      <textarea id="commentInput" class="comment-input" placeholder="Share your thoughts..."></textarea>
+      <button onclick="addComment()">Post Comment</button>
+    </div>
+    <div class="comments-list" id="commentsList">
+    </div>
+  </div>
+  
+  <div class="visitor-counter">
+    <span class="counter-icon">&#x1f465;</span>
+    <span>Visitors:</span>
+    <span class="visitor-count" id="visitorCount">Loading...</span>
+  </div>
+</div>
+
+<script>let numbers = [];
+let selectedNumbers = [];
+let numberBoxes = new Map();
+let consecutiveCorrect = 0;
+let currentLevel = 0;
+let numbersDesc = [];
+let selectedNumbersDesc = [];
+let numberBoxesDesc = new Map();
+let consecutiveCorrectDesc = 0;
+let currentLevelDesc = 0;
+const levels = ["1-30", "1-50", "1-100", "30-100", "50-100", "100-200"];
+let sequenceNumbers = [];
+let missingIndices = [];
+let consecutiveCorrectMissing = 0;
+let currentLevelMissing = 0;
+let fruits = [];
+let selectedFruits = [];
+let fruitBoxes = new Map();
+let consecutiveCorrectFruit = 0;
+const fruitList = ["Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew", "Kiwi", "Lemon", "Mango", "Orange", "Papaya", "Quince", "Raspberry", "Strawberry", "Tangerine", "Ugli fruit", "Watermelon"];
+function generateNumbers() {
+  const range = document.getElementById('rangeSelect').value;
+  const [min, max] = range.split('-').map(num => parseInt(num));
+  numbers = [];
+  while (numbers.length < 6) {
+    const num = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (!numbers.includes(num)) {
+      numbers.push(num);
+    }
+  }
+}
+function createNumberBoxes() {
+  const container = document.getElementById('numberContainer');
+  container.innerHTML = '';
+  numberBoxes.clear();
+  numbers.forEach((num, index) => {
+    const box = document.createElement('div');
+    box.className = 'number-box';
+    box.textContent = num;
+    box.onclick = () => selectNumber(num, box);
+    container.appendChild(box);
+    numberBoxes.set(num, box);
+  });
+  const answerContainer = document.getElementById('answerContainer');
+  answerContainer.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const box = document.createElement('div');
+    box.className = 'answer-box';
+    box.onclick = () => deselectNumber(i);
+    answerContainer.appendChild(box);
+  }
+}
+function selectNumber(num, box) {
+  if (selectedNumbers.includes(num)) return;
+  if (selectedNumbers.length >= 6) return;
+  selectedNumbers.push(num);
+  box.style.visibility = 'hidden';
+  const answerBoxes = document.querySelectorAll('.answer-box');
+  answerBoxes[selectedNumbers.length - 1].textContent = num;
+}
+function deselectNumber(index) {
+  if (index >= selectedNumbers.length) return;
+  const num = selectedNumbers[index];
+  const box = numberBoxes.get(num);
+  if (box) {
+    box.style.visibility = 'visible';
+  }
+  selectedNumbers.splice(index, 1);
+  const answerBoxes = document.querySelectorAll('.answer-box');
+  answerBoxes.forEach((box, i) => {
+    if (i < selectedNumbers.length) {
+      box.textContent = selectedNumbers[i];
+    } else {
+      box.textContent = '';
+    }
+  });
+}
+function checkAnswer() {
+  if (selectedNumbers.length !== 6) {
+    alert('Please select all numbers first!');
+    return;
+  }
+  const sortedNumbers = [...numbers].sort((a, b) => a - b);
+  const correct = selectedNumbers.every((num, index) => num === sortedNumbers[index]);
+  const answerBoxes = document.querySelectorAll('.answer-box');
+  answerBoxes.forEach((box, index) => {
+    box.classList.remove('correct', 'incorrect');
+    box.classList.add(selectedNumbers[index] === sortedNumbers[index] ? 'correct' : 'incorrect');
+  });
+  const congratsMessage = document.getElementById('congratsMessage');
+  if (correct) {
+    consecutiveCorrect++;
+    congratsMessage.style.display = 'block';
+    if (consecutiveCorrect >= 3 && currentLevel < levels.length - 1) {
+      currentLevel++;
+      consecutiveCorrect = 0;
+      document.getElementById('rangeSelect').value = levels[currentLevel];
+      congratsMessage.textContent = ' Great job! Moving to the next 30 numbers! ';
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newGame();
+      }, 2000);
+    } else {
+      congratsMessage.textContent = ' Congratulations! Perfect sorting! ';
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newGame();
+      }, 2000);
+    }
+  } else {
+    consecutiveCorrect = 0;
+    congratsMessage.style.display = 'none';
+  }
+}
+function newGame() {
+  selectedNumbers = [];
+  document.getElementById('rangeSelect').value = levels[currentLevel];
+  generateNumbers();
+  createNumberBoxes();
+}
+function generateNumbersDesc() {
+  const range = document.getElementById('rangeSelectDesc').value;
+  const [min, max] = range.split('-').map(num => parseInt(num));
+  numbersDesc = [];
+  while (numbersDesc.length < 6) {
+    const num = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (!numbersDesc.includes(num)) {
+      numbersDesc.push(num);
+    }
+  }
+}
+function createNumberBoxesDesc() {
+  const container = document.getElementById('numberContainerDesc');
+  container.innerHTML = '';
+  numberBoxesDesc.clear();
+  numbersDesc.forEach((num, index) => {
+    const box = document.createElement('div');
+    box.className = 'number-box';
+    box.textContent = num;
+    box.onclick = () => selectNumberDesc(num, box);
+    container.appendChild(box);
+    numberBoxesDesc.set(num, box);
+  });
+  const answerContainer = document.getElementById('answerContainerDesc');
+  answerContainer.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const box = document.createElement('div');
+    box.className = 'answer-box';
+    box.onclick = () => deselectNumberDesc(i);
+    answerContainer.appendChild(box);
+  }
+}
+function selectNumberDesc(num, box) {
+  if (selectedNumbersDesc.includes(num)) return;
+  if (selectedNumbersDesc.length >= 6) return;
+  selectedNumbersDesc.push(num);
+  box.style.visibility = 'hidden';
+  const answerBoxes = document.querySelectorAll('#answerContainerDesc .answer-box');
+  answerBoxes[selectedNumbersDesc.length - 1].textContent = num;
+}
+function deselectNumberDesc(index) {
+  if (index >= selectedNumbersDesc.length) return;
+  const num = selectedNumbersDesc[index];
+  const box = numberBoxesDesc.get(num);
+  if (box) {
+    box.style.visibility = 'visible';
+  }
+  selectedNumbersDesc.splice(index, 1);
+  const answerBoxes = document.querySelectorAll('#answerContainerDesc .answer-box');
+  answerBoxes.forEach((box, i) => {
+    if (i < selectedNumbersDesc.length) {
+      box.textContent = selectedNumbersDesc[i];
+    } else {
+      box.textContent = '';
+    }
+  });
+}
+function checkAnswerDesc() {
+  if (selectedNumbersDesc.length !== 6) {
+    alert('Please select all numbers first!');
+    return;
+  }
+  const sortedNumbers = [...numbersDesc].sort((a, b) => b - a);
+  const correct = selectedNumbersDesc.every((num, index) => num === sortedNumbers[index]);
+  const answerBoxes = document.querySelectorAll('#answerContainerDesc .answer-box');
+  answerBoxes.forEach((box, index) => {
+    box.classList.remove('correct', 'incorrect');
+    box.classList.add(selectedNumbersDesc[index] === sortedNumbers[index] ? 'correct' : 'incorrect');
+  });
+  const congratsMessage = document.getElementById('congratsMessageDesc');
+  if (correct) {
+    consecutiveCorrectDesc++;
+    congratsMessage.style.display = 'block';
+    if (consecutiveCorrectDesc >= 3 && currentLevelDesc < levels.length - 1) {
+      currentLevelDesc++;
+      consecutiveCorrectDesc = 0;
+      document.getElementById('rangeSelectDesc').value = levels[currentLevelDesc];
+      congratsMessage.textContent = ' Great job! Moving to the next 30 numbers! ';
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newGameDesc();
+      }, 2000);
+    } else {
+      congratsMessage.textContent = ' Congratulations! Perfect sorting! ';
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newGameDesc();
+      }, 2000);
+    }
+  } else {
+    consecutiveCorrectDesc = 0;
+    congratsMessage.style.display = 'none';
+  }
+}
+function newGameDesc() {
+  selectedNumbersDesc = [];
+  generateNumbersDesc();
+  createNumberBoxesDesc();
+}
+function generateMissingSequence() {
+  const min = 1;
+  const max = 100;
+  const start = Math.floor(Math.random() * (max - min - 7)) + min;
+  sequenceNumbers = Array.from({
+    length: 8
+  }, (_, i) => start + i);
+  const numMissing = Math.floor(Math.random() * 4) + 2;
+  missingIndices = [];
+  while (missingIndices.length < numMissing) {
+    const index = Math.floor(Math.random() * 8);
+    if (!missingIndices.includes(index)) {
+      missingIndices.push(index);
+    }
+  }
+}
+function createSequence() {
+  const container = document.getElementById('sequenceContainer');
+  container.innerHTML = '';
+  sequenceNumbers.forEach((num, index) => {
+    if (missingIndices.includes(index)) {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.className = 'sequence-input';
+      input.id = `missing-${index}`;
+      container.appendChild(input);
+    } else {
+      const box = document.createElement('div');
+      box.className = 'sequence-box';
+      box.textContent = num;
+      container.appendChild(box);
+    }
+  });
+}
+function checkMissing() {
+  let allCorrect = true;
+  missingIndices.forEach(index => {
+    const input = document.getElementById(`missing-${index}`);
+    if (!input) {
+      console.error('Missing input element for index:', index);
+      return;
+    }
+    const value = parseInt(input.value);
+    input.classList.remove('correct', 'incorrect');
+    if (value === sequenceNumbers[index]) {
+      input.classList.add('correct');
+    } else {
+      input.classList.add('incorrect');
+      allCorrect = false;
+    }
+  });
+  const congratsMessage = document.getElementById('congratsMessageMissing');
+  if (allCorrect) {
+    consecutiveCorrectMissing++;
+    congratsMessage.style.display = 'block';
+    if (consecutiveCorrectMissing >= 3 && currentLevelMissing < levels.length - 1) {
+      currentLevelMissing++;
+      consecutiveCorrectMissing = 0;
+      congratsMessage.textContent = 'Great job! Moving to the next level!';
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newMissing();
+      }, 2000);
+    } else {
+      congratsMessage.textContent = 'Congratulations! All numbers are correct!';
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newMissing();
+      }, 2000);
+    }
+  } else {
+    consecutiveCorrectMissing = 0;
+    congratsMessage.style.display = 'none';
+    setTimeout(() => {
+      newMissing();
+    }, 1000);
+  }
+}
+function newMissing() {
+  generateMissingSequence();
+  createSequence();
+}
+function initVisitorCounter() {
+  let count = localStorage.getItem('visitorCount');
+  if (!count) {
+    count = 1;
+  } else {
+    const lastVisit = localStorage.getItem('lastVisit');
+    const now = new Date().getTime();
+    if (!lastVisit || now - lastVisit > 24 * 60 * 60 * 1000) {
+      count = parseInt(count) + 1;
+    }
+  }
+  localStorage.setItem('visitorCount', count);
+  localStorage.setItem('lastVisit', new Date().getTime());
+  document.getElementById('visitorCount').textContent = count;
+}
+function addComment() {
+  const commentInput = document.getElementById('commentInput');
+  const commentsList = document.getElementById('commentsList');
+  const commentText = commentInput.value.trim();
+  if (commentText) {
+    const comment = document.createElement('div');
+    comment.className = 'comment';
+    const now = new Date();
+    const dateStr = now.toLocaleDateString();
+    const timeStr = now.toLocaleTimeString();
+    comment.innerHTML = `
+      <div class="comment-header">
+        <span>Anonymous</span>
+        <span>${dateStr} ${timeStr}</span>
+      </div>
+      <p class="comment-text">${commentText}</p>
+    `;
+    commentsList.insertBefore(comment, commentsList.firstChild);
+    commentInput.value = '';
+    const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+    comments.unshift({
+      text: commentText,
+      date: now.toISOString(),
+      author: 'Anonymous'
+    });
+    localStorage.setItem('comments', JSON.stringify(comments));
+  }
+}
+function loadComments() {
+  const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+  const commentsList = document.getElementById('commentsList');
+  comments.forEach(comment => {
+    const commentElement = document.createElement('div');
+    commentElement.className = 'comment';
+    const date = new Date(comment.date);
+    const dateStr = date.toLocaleDateString();
+    const timeStr = date.toLocaleTimeString();
+    commentElement.innerHTML = `
+      <div class="comment-header">
+        <span>${comment.author}</span>
+        <span>${dateStr} ${timeStr}</span>
+      </div>
+      <p class="comment-text">${comment.text}</p>
+    `;
+    commentsList.appendChild(commentElement);
+  });
+}
+function generateFruits() {
+  fruits = [];
+  while (fruits.length < 6) {
+    const fruit = fruitList[Math.floor(Math.random() * fruitList.length)];
+    if (!fruits.includes(fruit)) {
+      fruits.push(fruit);
+    }
+  }
+}
+function createFruitBoxes() {
+  const container = document.getElementById('fruitContainer');
+  container.innerHTML = '';
+  fruitBoxes.clear();
+  fruits.forEach(fruit => {
+    const box = document.createElement('div');
+    box.className = 'fruit-box';
+    box.textContent = fruit;
+    box.onclick = () => selectFruit(fruit, box);
+    container.appendChild(box);
+    fruitBoxes.set(fruit, box);
+  });
+  const answerContainer = document.getElementById('fruitAnswerContainer');
+  answerContainer.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const box = document.createElement('div');
+    box.className = 'fruit-answer';
+    box.onclick = () => deselectFruit(i);
+    answerContainer.appendChild(box);
+  }
+}
+function selectFruit(fruit, box) {
+  if (selectedFruits.includes(fruit)) return;
+  if (selectedFruits.length >= 6) return;
+  selectedFruits.push(fruit);
+  box.style.visibility = 'hidden';
+  const answerBoxes = document.querySelectorAll('#fruitAnswerContainer .fruit-answer');
+  answerBoxes[selectedFruits.length - 1].textContent = fruit;
+}
+function deselectFruit(index) {
+  if (index >= selectedFruits.length) return;
+  const fruit = selectedFruits[index];
+  const box = fruitBoxes.get(fruit);
+  if (box) {
+    box.style.visibility = 'visible';
+  }
+  selectedFruits.splice(index, 1);
+  const answerBoxes = document.querySelectorAll('#fruitAnswerContainer .fruit-answer');
+  answerBoxes.forEach((box, i) => {
+    if (i < selectedFruits.length) {
+      box.textContent = selectedFruits[i];
+    } else {
+      box.textContent = '';
+    }
+  });
+}
+function checkFruitAnswer() {
+  if (selectedFruits.length !== 6) {
+    alert('Please select all fruits first!');
+    return;
+  }
+  const sortedFruits = [...fruits].sort();
+  const correct = selectedFruits.every((fruit, index) => fruit === sortedFruits[index]);
+  const answerBoxes = document.querySelectorAll('#fruitAnswerContainer .fruit-answer');
+  answerBoxes.forEach((box, index) => {
+    box.classList.remove('correct', 'incorrect');
+    box.classList.add(selectedFruits[index] === sortedFruits[index] ? 'correct' : 'incorrect');
+  });
+  const congratsMessage = document.getElementById('congratsMessageFruit');
+  if (correct) {
+    consecutiveCorrectFruit++;
+    congratsMessage.style.display = 'block';
+    congratsMessage.textContent = 'Congratulations! Perfect sorting!';
+    setTimeout(() => {
+      congratsMessage.style.display = 'none';
+      newFruitGame();
+    }, 2000);
+  } else {
+    consecutiveCorrectFruit = 0;
+    congratsMessage.style.display = 'none';
+  }
+}
+function newFruitGame() {
+  selectedFruits = [];
+  generateFruits();
+  createFruitBoxes();
+}
+document.getElementById('rangeSelect').value = "1-30";
+initVisitorCounter();
+loadComments();
+newGame();
+newGameDesc();
+newMissing();
+newFruitGame();</script>
+</body></html>
