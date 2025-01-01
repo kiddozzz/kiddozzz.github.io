@@ -541,7 +541,7 @@ const db = firebase.firestore();
 
 let lastVisitTime = localStorage.getItem('lastVisitTime') || 0;
 let visitCount = parseInt(localStorage.getItem('visitCount') || '0');
-const VISIT_TIMEOUT = 60 * 1000; // 1 hour in milliseconds
+const VISIT_TIMEOUT = 60 * 1000; // 1 min in milliseconds
 
 const animalBadges = [
   { animal: '🐶', name: 'Puppy Badge' },
@@ -1048,7 +1048,7 @@ function updateBadgesDisplay() {
   const badgesContainer = document.getElementById('badgesContainer');
   badgesContainer.innerHTML = '';
   
-  const earnedBadges = Math.floor(visitCount / 3); 
+  const earnedBadges = Math.floor(visitCount / 4); 
   
   for (let i = 0; i < animalBadges.length; i++) {
     const badge = document.createElement('div');
