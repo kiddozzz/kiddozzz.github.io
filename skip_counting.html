@@ -1,0 +1,653 @@
+<html><head><base href="https://cdn.jsdelivr.net/">
+<meta charset="UTF-8">
+<title>Unicorn</title>
+<style>
+:root {
+  --primary: #4CAF50;
+  --secondary: #FFC107;
+  --background: #f0f7ff;
+}
+
+body {
+  font-family: 'Comic Sans MS', cursive;
+  margin: 0;
+  padding: 20px;
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  padding: 20px;
+  background: #FFDAB9;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+
+.demo-section {
+  background: #E6FFE6;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative; 
+}
+
+.demo-numbers {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+  position: relative; 
+}
+
+.demo-number {
+  width: 50px;
+  height: 50px;
+  background: white;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  position: relative;
+}
+
+.frog-character {
+  position: absolute;
+  font-size: 24px;
+  transition: all 0.5s ease;
+  z-index: 10;
+}
+
+.jump-button {
+  background: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.jump-button:hover {
+  background: #45a049;
+}
+
+.visitor-counter {
+  background: white;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.missing-numbers {
+  background: #F0E6FF;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.missing-numbers h2 {
+  text-align: center;  
+}
+
+.missing-numbers p {
+  text-align: center;
+}
+
+.sequence-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.sequence-box {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border: 2px solid #9370DB;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.sequence-input {
+  width: 60px;
+  height: 60px;
+  background: #F0E6FF;
+  border: 2px dashed #9370DB;
+  border-radius: 10px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.skip-selector {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.skip-selector label {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.skip-selector input {
+  margin-right: 10px;
+}
+
+.skip-button {
+  margin: 5px;
+  padding: 8px 16px;
+  background: #9370DB;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.skip-button.active {
+  background: var(--primary);
+  transform: scale(1.1);
+}
+
+.skip-button:hover {
+  background: var(--secondary);
+}
+
+.congratulations-message {
+  background: #FFE5F1;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 20px 0;
+  text-align: center;
+  display: none;
+  color: #4CAF50;
+  font-size: 1.2em;
+  animation: fadeIn 0.5s ease-in;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.error-message {
+  color: red;
+  display: none;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.home-link {
+  position: fixed;
+  left: 20px;
+  top: 40px;
+  background: var(--primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s;
+  z-index: 100;
+}
+
+.home-link:hover {
+  background: var(--secondary);
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: var(--secondary);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.puzzle-section {
+  background: #FFE6CC;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin: 20px auto;
+  width: fit-content;
+  justify-content: center;
+}
+
+.puzzle-cell {
+  width: 45px;
+  height: 45px;
+  background: white;
+  border: 2px solid #FF9933;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.puzzle-cell.selected {
+  background: #FF9933;
+  color: white;
+}
+
+.puzzle-cell.correct {
+  background: #4CAF50;
+  color: white;
+}
+
+.puzzle-cell.incorrect {
+  background: #f44336;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<a href="https://kiddozzz.github.io" class="home-link">Home</a>
+<div class="container">
+  <div class="header">
+    <h1>&#x1f438; Frog Skip Counting! &#x1f438;</h1>
+    <p>Learn and have fun with numbers!</p>
+  </div>
+
+  <div class="demo-section">
+    <h2>Skip Counting by 2&apos;s Demo</h2>
+    <p>Watch how the frog hops to count by 2&apos;s!</p>
+    <div class="demo-numbers" id="demoNumbers">
+      <div class="demo-number">2</div>
+      <div class="demo-number">4</div>
+      <div class="demo-number">6</div>
+      <div class="demo-number">8</div>
+      <div class="demo-number">10</div>
+      <div class="demo-number">12</div>
+      <div class="demo-number">14</div>
+      <div class="demo-number">16</div>
+      <div class="demo-number">18</div>
+      <div class="demo-number">20</div>
+    </div>
+    <button class="jump-button" onclick="jumpFrog()">Jump from 2</button>
+    <div class="demo-numbers" id="demoNumbers2">
+      <div class="demo-number">1</div>
+      <div class="demo-number">3</div>
+      <div class="demo-number">5</div>
+      <div class="demo-number">7</div>
+      <div class="demo-number">9</div>
+      <div class="demo-number">11</div>
+      <div class="demo-number">13</div>
+      <div class="demo-number">15</div>
+      <div class="demo-number">17</div>
+      <div class="demo-number">19</div>
+    </div>
+    <button class="jump-button" onclick="jumpFrog2()">Jump from 1</button>
+    <p>The frog jumps over one number each time to count by 2&apos;s!</p>
+  </div>
+
+  <div class="sorting-section missing-numbers">
+    <h2>&#x1f438; Fill the Missing Numbers Challenge &#x1f438;</h2>
+    <div class="skip-selector">
+      <label for="skipInput">Enter skip count:</label>
+      <input type="number" id="skipInput" min="1" max="100" value="2" class="sequence-input" style="width: 80px; height: 40px;">
+      <button class="skip-button" onclick="setCustomSkip()">Set Skip</button>
+    </div>
+    <p>Fill in the missing numbers in the sequence!</p>
+    <div class="sequence-container" id="sequenceContainer"></div>
+    <div class="button-container">
+      <button onclick="checkMissing()">Check Answer</button>
+      <button onclick="newMissing()">New Sequence</button>
+    </div>
+    <div id="errorMessage" class="error-message">Try again!</div>
+    <div id="congratsMessageMissing" class="congratulations-message"></div>
+  </div>
+
+  <div class="puzzle-section">
+    <h2>&#x1f438; Skip Count Puzzle &#x1f438;</h2>
+    <p>Find all numbers in the skip counting pattern! Current skip: <span id="currentSkip">2</span></p>
+    <div class="puzzle-grid" id="puzzleGrid"></div>
+    <div class="button-container">
+      <button onclick="checkPuzzle()">Check Pattern</button>
+      <button onclick="newPuzzle()">New Puzzle</button>
+    </div>
+    <div id="puzzleMessage" class="congratulations-message"></div>
+  </div>
+
+  <div class="visitor-counter">
+    <span class="counter-icon">&#x1f465;</span>
+    <span>Visitors:</span>
+    <span class="visitor-count" id="visitorCount">Loading...</span>
+  </div>
+</div>
+
+<script>let currentPosition = 0;
+let currentPosition2 = 0;
+const positions = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+const positions2 = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+const synth = window.speechSynthesis;
+function initializeFrog() {
+  const demoNumbers = document.getElementById('demoNumbers');
+  const frog = document.createElement('div');
+  frog.className = 'frog-character';
+  frog.textContent = '🐸';
+  frog.id = 'jumpingFrog';
+  demoNumbers.appendChild(frog);
+  positionFrogAtNumber(0);
+  const demoNumbers2 = document.getElementById('demoNumbers2');
+  const frog2 = document.createElement('div');
+  frog2.className = 'frog-character';
+  frog2.textContent = '🐸';
+  frog2.id = 'jumpingFrog2';
+  demoNumbers2.appendChild(frog2);
+  positionFrog2AtNumber(0);
+}
+function positionFrogAtNumber(index) {
+  const frog = document.getElementById('jumpingFrog');
+  const numberElements = document.querySelectorAll('.demo-number');
+  if (index < numberElements.length) {
+    const centerX = numberElements[index].offsetLeft + numberElements[index].offsetWidth / 2 - 12;
+    const topY = numberElements[index].offsetTop - 24;
+    frog.style.left = `${centerX}px`;
+    frog.style.top = `${topY}px`;
+    const utterance = new SpeechSynthesisUtterance(positions[index].toString());
+    synth.speak(utterance);
+  }
+}
+function positionFrog2AtNumber(index) {
+  const frog = document.getElementById('jumpingFrog2');
+  const numberElements = document.querySelectorAll('#demoNumbers2 .demo-number');
+  if (index < numberElements.length) {
+    const centerX = numberElements[index].offsetLeft + numberElements[index].offsetWidth / 2 - 12;
+    const topY = numberElements[index].offsetTop - 24;
+    frog.style.left = `${centerX}px`;
+    frog.style.top = `${topY}px`;
+    const utterance = new SpeechSynthesisUtterance(positions2[index].toString());
+    synth.speak(utterance);
+  }
+}
+function jumpFrog() {
+  if (currentPosition < positions.length - 1) {
+    currentPosition++;
+    positionFrogAtNumber(currentPosition);
+  } else {
+    currentPosition = 0;
+    positionFrogAtNumber(currentPosition);
+  }
+}
+function jumpFrog2() {
+  if (currentPosition2 < positions2.length - 1) {
+    currentPosition2++;
+    positionFrog2AtNumber(currentPosition2);
+  } else {
+    currentPosition2 = 0;
+    positionFrog2AtNumber(currentPosition2);
+  }
+}
+let sequenceNumbers = [];
+let missingIndices = [];
+let consecutiveCorrectMissing = 0;
+let currentLevelMissing = 0;
+let currentSkipPattern = 2;
+function setCustomSkip() {
+  const skipInput = document.getElementById('skipInput');
+  const skipValue = parseInt(skipInput.value);
+  if (skipValue && skipValue > 0 && skipValue <= 100) {
+    currentSkipPattern = skipValue;
+    newMissing();
+  } else {
+    alert('Please enter a valid number between 1 and 100');
+    skipInput.value = currentSkipPattern;
+  }
+}
+function generateMissingSequence() {
+  const min = 1;
+  const max = 100;
+  const start = Math.floor(Math.random() * (max - min - 7 * currentSkipPattern)) + min;
+  sequenceNumbers = Array.from({
+    length: 8
+  }, (_, i) => start + i * currentSkipPattern);
+  const numMissing = Math.floor(Math.random() * 3) + 2;
+  missingIndices = [];
+  while (missingIndices.length < numMissing) {
+    const index = Math.floor(Math.random() * 8);
+    if (!missingIndices.includes(index)) {
+      missingIndices.push(index);
+    }
+  }
+}
+function createSequence() {
+  const container = document.getElementById('sequenceContainer');
+  container.innerHTML = '';
+  sequenceNumbers.forEach((num, index) => {
+    if (missingIndices.includes(index)) {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.className = 'sequence-input';
+      input.id = `missing-${index}`;
+      container.appendChild(input);
+    } else {
+      const box = document.createElement('div');
+      box.className = 'sequence-box';
+      box.textContent = num;
+      container.appendChild(box);
+    }
+  });
+}
+function checkMissing() {
+  let allCorrect = true;
+  const errorMessage = document.getElementById('errorMessage');
+  missingIndices.forEach(index => {
+    const input = document.getElementById(`missing-${index}`);
+    if (!input) {
+      console.error('Missing input element for index:', index);
+      return;
+    }
+    const value = parseInt(input.value);
+    input.classList.remove('correct', 'incorrect');
+    if (value === sequenceNumbers[index]) {
+      input.classList.add('correct');
+    } else {
+      input.classList.add('incorrect');
+      allCorrect = false;
+    }
+  });
+  const congratsMessage = document.getElementById('congratsMessageMissing');
+  if (allCorrect) {
+    consecutiveCorrectMissing++;
+    congratsMessage.style.display = 'block';
+    errorMessage.style.display = 'none';
+    if (consecutiveCorrectMissing >= 3) {
+      consecutiveCorrectMissing = 0;
+      congratsMessage.textContent = `Great job! You've mastered counting by ${currentSkipPattern}s!`;
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newMissing();
+      }, 2000);
+    } else {
+      congratsMessage.textContent = 'Congratulations! All numbers are correct!';
+      setTimeout(() => {
+        congratsMessage.style.display = 'none';
+        newMissing();
+      }, 2000);
+    }
+  } else {
+    consecutiveCorrectMissing = 0;
+    congratsMessage.style.display = 'none';
+    errorMessage.style.display = 'block';
+    setTimeout(() => {
+      errorMessage.style.display = 'none';
+    }, 2000);
+  }
+}
+function newMissing() {
+  generateMissingSequence();
+  createSequence();
+  document.getElementById('errorMessage').style.display = 'none';
+}
+let puzzleNumbers = [];
+let selectedCells = [];
+let currentPuzzleSkip = 2;
+function generatePuzzleNumbers() {
+  const gridSize = 20;
+  const start = Math.floor(Math.random() * 10) + 1;
+  currentPuzzleSkip = Math.floor(Math.random() * 5) + 2;
+  document.getElementById('currentSkip').textContent = currentPuzzleSkip;
+  const allNumbers = Array.from({
+    length: 50
+  }, (_, i) => i + 1);
+  const sequenceLength = 5;
+  const sequence = Array.from({
+    length: sequenceLength
+  }, (_, i) => start + i * currentPuzzleSkip);
+  sequence.forEach(num => {
+    const index = allNumbers.indexOf(num);
+    if (index > -1) {
+      allNumbers.splice(index, 1);
+    }
+  });
+  for (let i = allNumbers.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allNumbers[i], allNumbers[j]] = [allNumbers[j], allNumbers[i]];
+  }
+  const fillerNumbers = allNumbers.slice(0, gridSize - sequenceLength);
+  puzzleNumbers = new Array(gridSize);
+  const positions = [];
+  while (positions.length < sequenceLength) {
+    const pos = Math.floor(Math.random() * gridSize);
+    if (!positions.includes(pos)) {
+      positions.push(pos);
+      puzzleNumbers[pos] = sequence[positions.length - 1];
+    }
+  }
+  let fillerIndex = 0;
+  for (let i = 0; i < gridSize; i++) {
+    if (!positions.includes(i)) {
+      puzzleNumbers[i] = fillerNumbers[fillerIndex++];
+    }
+  }
+}
+function createPuzzleGrid() {
+  const grid = document.getElementById('puzzleGrid');
+  grid.innerHTML = '';
+  selectedCells = [];
+  puzzleNumbers.forEach((num, idx) => {
+    const cell = document.createElement('div');
+    cell.className = 'puzzle-cell';
+    cell.textContent = num;
+    cell.dataset.index = idx;
+    cell.addEventListener('click', toggleCell);
+    grid.appendChild(cell);
+  });
+}
+function toggleCell(e) {
+  const cell = e.target;
+  const index = parseInt(cell.dataset.index);
+  if (cell.classList.contains('incorrect')) {
+    cell.classList.remove('selected', 'incorrect');
+    selectedCells = selectedCells.filter(i => i !== index);
+    return;
+  }
+  if (cell.classList.contains('selected')) {
+    cell.classList.remove('selected');
+    selectedCells = selectedCells.filter(i => i !== index);
+  } else {
+    cell.classList.add('selected');
+    selectedCells.push(index);
+  }
+}
+function checkPuzzle() {
+  const selectedNumbers = selectedCells.map(idx => puzzleNumbers[idx]).sort((a, b) => a - b);
+  const isValidSequence = selectedNumbers.every((num, idx) => {
+    if (idx === 0) return true;
+    return num - selectedNumbers[idx - 1] === currentPuzzleSkip;
+  });
+  const cells = document.querySelectorAll('.puzzle-cell');
+  cells.forEach(cell => {
+    const idx = parseInt(cell.dataset.index);
+    cell.classList.remove('correct', 'incorrect');
+    if (selectedCells.includes(idx)) {
+      cell.classList.add(isValidSequence ? 'correct' : 'incorrect');
+    }
+  });
+  const message = document.getElementById('puzzleMessage');
+  message.style.display = 'block';
+  if (isValidSequence) {
+    message.textContent = 'Great job! You found the pattern!';
+    setTimeout(() => {
+      message.style.display = 'none';
+      newPuzzle();
+    }, 2000);
+  } else {
+    message.textContent = 'Try again! Find numbers that skip count by ' + currentPuzzleSkip;
+    setTimeout(() => {
+      message.style.display = 'none';
+    }, 2000);
+  }
+}
+function newPuzzle() {
+  generatePuzzleNumbers();
+  createPuzzleGrid();
+}
+function initVisitorCounter() {
+  let count = localStorage.getItem('visitorCount');
+  if (!count) {
+    count = 1;
+  } else {
+    const lastVisit = localStorage.getItem('lastVisit');
+    const now = new Date().getTime();
+    if (!lastVisit || now - lastVisit > 24 * 60 * 60 * 1000) {
+      count = parseInt(count) + 1;
+    }
+  }
+  localStorage.setItem('visitorCount', count);
+  localStorage.setItem('lastVisit', new Date().getTime());
+  document.getElementById('visitorCount').textContent = count;
+}
+window.onload = function () {
+  initializeFrog();
+  initVisitorCounter();
+  newMissing();
+  newPuzzle();
+};</script>
+</body></html>
