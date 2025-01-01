@@ -261,6 +261,13 @@ button:hover {
   margin-top: 20px;
 }
 
+.try-again-message {
+  color: #ff0000;
+  font-size: 1.1em;
+  margin-top: 10px;
+  display: none;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -325,6 +332,7 @@ button:hover {
     <h2>&#x1f984; Fill the Missing Numbers Challenge &#x1f984;</h2>
     <p>Fill in the missing numbers in the sequence!</p>
     <div class="sequence-container" id="sequenceContainer"></div>
+    <div id="tryAgainMessageMissing" class="try-again-message">Try again!</div>
     <div class="button-container">
       <button onclick="checkMissing()">Check Answer</button>
       <button onclick="newMissing()">New Sequence</button>
@@ -334,7 +342,7 @@ button:hover {
 
   <div class="fruit-sorting">
     <h2>&#x1f34e; Fruit Alphabet Sort &#x1f34f;</h2>
-    <p>Sort these fruits in alphabetical order! Click the fruits in order.</p>
+    <p>Sort these fruits in alphabetical order according to the first letter! Click the fruits in order.</p>
     <div class="fruit-container" id="fruitContainer"></div>
     <div class="answer-container" id="fruitAnswerContainer"></div>
     <div class="button-container">
@@ -342,6 +350,7 @@ button:hover {
       <button onclick="newFruitGame()">New Fruits</button>
     </div>
     <div id="congratsMessageFruit" class="congratulations-message"></div>
+    <div id="tryAgainMessageFruit" class="try-again-message"></div>
   </div>
 
   <div class="visitor-counter">
@@ -606,6 +615,7 @@ function createSequence() {
 }
 function checkMissing() {
   let allCorrect = true;
+  const tryAgainMessage = document.getElementById('tryAgainMessageMissing');
   missingIndices.forEach(index => {
     const input = document.getElementById(`missing-${index}`);
     if (!input) {
@@ -619,10 +629,12 @@ function checkMissing() {
     } else {
       input.classList.add('incorrect');
       allCorrect = false;
+      input.value = '';
     }
   });
   const congratsMessage = document.getElementById('congratsMessageMissing');
   if (allCorrect) {
+    tryAgainMessage.style.display = 'none';
     consecutiveCorrectMissing++;
     congratsMessage.style.display = 'block';
     if (consecutiveCorrectMissing >= 3 && currentLevelMissing < levels.length - 1) {
@@ -643,12 +655,12 @@ function checkMissing() {
   } else {
     consecutiveCorrectMissing = 0;
     congratsMessage.style.display = 'none';
-    setTimeout(() => {
-      newMissing();
-    }, 1000);
+    tryAgainMessage.style.display = 'block';
   }
 }
 function newMissing() {
+  const tryAgainMessage = document.getElementById('tryAgainMessageMissing');
+  tryAgainMessage.style.display = 'none';
   generateMissingSequence();
   createSequence();
 }
@@ -735,7 +747,9 @@ function checkFruitAnswer() {
     box.classList.add(selectedFruits[index] === sortedFruits[index] ? 'correct' : 'incorrect');
   });
   const congratsMessage = document.getElementById('congratsMessageFruit');
+  const tryAgainMessage = document.getElementById('tryAgainMessageFruit');
   if (correct) {
+    tryAgainMessage.style.display = 'none';
     consecutiveCorrectFruit++;
     congratsMessage.style.display = 'block';
     congratsMessage.textContent = 'Congratulations! Perfect sorting!';
@@ -746,10 +760,14 @@ function checkFruitAnswer() {
   } else {
     consecutiveCorrectFruit = 0;
     congratsMessage.style.display = 'none';
+    tryAgainMessage.style.display = 'block';
+    tryAgainMessage.textContent = 'Try again!';
   }
 }
 function newFruitGame() {
   selectedFruits = [];
+  const tryAgainMessage = document.getElementById('tryAgainMessageFruit');
+  tryAgainMessage.style.display = 'none';
   generateFruits();
   createFruitBoxes();
 }
