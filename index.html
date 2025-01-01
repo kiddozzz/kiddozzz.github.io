@@ -813,28 +813,58 @@ function checkWin() {
   }
 }
 function initVisitorCounter() {
-  fetch('https://kiddozzz.github.io/visitors/count', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById('visitorCount').textContent = data.count;
-    updateBadges(data.count);
-  })
-  .catch(error => {
-    console.error('Error updating visitor count:', error);;
-    let count = localStorage.getItem('visitorCount');
-    if (count === null) {
-        count = 0; // First time visiting
-    }
-    count += 1;
-    localStorage.setItem('visitorCount', count);
-    document.getElementById('visitorCount').textContent = count;
-    updateBadges(parseInt(count));
-  });
+  let lastVisitTime = localStorage.getItem('lastVisitTime') || 0;
+  const now = Date.now();
+  const oneHour = 60 * 1000; // 1 hour in milliseconds
+  
+  if (now - lastVisitTime > oneHour) {
+    fetch('https://kiddozzz.github.io/visitors/count', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('visitorCount').textContent = data.count;
+      updateBadges(data.count);
+      // Update last visit time
+      lastVisitTime = now;
+      localStorage.setItem('lastVisitTime', now);
+    })
+    .catch(error => {
+      console.error('Error updating visitor count:', error);
+      let count = parseInt(localStorage.getItem('visitorCount') || '1');
+      // Only increment if more than 1 hour passed
+      if (now - lastVisitTime > oneHour) {
+        count++;
+        localStorage.setItem('visitorCount', count);
+        lastVisitTime = now;
+        localStorage.setItem('lastVisitTime', now);
+      }
+      document.getElementById('visitorCount').textContent = count;
+      updateBadges(parseInt(count));
+    });
+  } else {
+    // If less than 1 hour, just display current count
+    fetch('https://kiddozzz.github.io/visitors/count', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json' 
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('visitorCount').textContent = data.count;
+      updateBadges(data.count);
+    })
+    .catch(error => {
+      console.error('Error getting visitor count:', error);
+      const count = localStorage.getItem('visitorCount') || 1;
+      document.getElementById('visitorCount').textContent = count;
+      updateBadges(parseInt(count));
+    });
+  }
 }
 function updateBadges(visitCount) {
   const badgesContainer = document.getElementById('badgesContainer');
